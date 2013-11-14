@@ -15,10 +15,11 @@
 # limitations under the License.
 
 class User < ActiveRecord::Base
-
   ROLES = [
     "reader", "editor", "publisher", "administrator"
   ]
+
+  has_secure_password
 
   validates_length_of :forename, :surname, :within => 2..255
   validates_inclusion_of :role, :in => ROLES
@@ -26,13 +27,31 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email
   # validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
 
-  acts_as_authentic do |config|
-    config.validate_email_field = false
-    config.maintain_sessions = false
-  end
-
   def self.default_role
     "reader"
+  end
+
+  def valid_password?(password)
+    begin
+      authenticate(password)
+    rescue BCrypt::Errors::InvalidHash
+      stretches = 20
+      digest  = [password, password_salt].flatten.join('')
+      stretches.times {digest = Digest::SHA512.hexdigest(digest)}
+      if digest == self.crypted_password
+        self.generate_token(:auth_token)
+        self.password = self.password_confirmation = password
+
+        # deletes sha512 once user has logged in and updated to bcrypt
+        self.crypted_password = self.password_salt = nil
+
+        self.save
+        return true
+      else
+        # If not BCryt password and not old Authlogic SHA512 password Dosn't my user
+        return false
+      end
+    end
   end
 
   def name

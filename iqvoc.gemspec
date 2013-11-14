@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'bootstrap-sass', '~> 2.3.1.3'
   s.add_dependency 'iq_triplestorage'
   s.add_dependency 'protected_attributes', '>= 1.0.5'
+  s.add_dependency 'bcrypt-ruby', '~> 3.1.2'
 
   s.files = %w(LICENSE README.md CHANGELOG.md Gemfile Gemfile.lock Rakefile iqvoc.gemspec) +
     Dir.glob("{app,config,db,public,lib,test,vendor}/**/*")

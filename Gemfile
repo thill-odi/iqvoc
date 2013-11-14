@@ -33,6 +33,7 @@ gem 'simple_form', :git => 'git://github.com/plataformatec/simple_form.git'
 gem 'uglifier'
 gem 'sass-rails', '~> 4.0.0'
 gem 'bootstrap-sass', '2.3.1.3'
+gem 'bcrypt-ruby', '~> 3.1.2'
 
 group :development do
   gem 'view_marker'
