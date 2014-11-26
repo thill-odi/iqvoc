@@ -1,6 +1,6 @@
 <%= page_header :title => Iqvoc::Concept.base_class.model_name.human(:count => 2),
   :desc => t('txt.views.navigation.hierarchical') %>
-<%= render 'concepts/sidebars/plural' %>
+<%#= render 'concepts/sidebars/plural' %>
 
 <% if params[:published] == '0' %>
   <%= render "concepts/hierarchical/treeview", concepts: @concepts, broader: false, dragabble: true %>

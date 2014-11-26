@@ -59,7 +59,30 @@ module Iqvoc
           :active? => proc {
             %w(concepts/hierarchical concepts/alphabetical concepts/untranslated).
                 include?(params[:controller])
-          }
+          },
+          items: [{
+              text: proc { t('txt.views.navigation.hierarchical') },
+              href: proc { hierarchical_concepts_path },
+              active?: proc { (params[:controller] == 'concepts/hierarchical' && params[:published].blank?) }
+            }, {
+              text: proc { t('txt.views.navigation.alphabetical') },
+              href: proc { alphabetical_concepts_path(prefix: 'a') },
+              controller: 'concepts/alphabetical'
+            }, {
+              text: proc { t('txt.views.navigation.draft') },
+              href: proc { hierarchical_concepts_path(published: 0) },
+              active?: proc { (params[:controller] == 'concepts/hierarchical' && params[:published] == '0') },
+              authorized?: proc { can?(:update, Iqvoc::Concept.base_class) }
+            }, {
+              text: proc { t('txt.views.navigation.expired') },
+              href: proc { expired_concepts_path(prefix: 'a') },
+              controller: 'concepts/expired'
+            }, {
+              text: proc { t('txt.views.untranslated_concepts.caption') },
+              href: proc { untranslated_concepts_path(prefix: params[:prefix] || 'a') },
+              authorized?: proc { I18n.locale.to_s != Iqvoc::Concept.pref_labeling_languages.first },
+              controller: 'concepts/untranslated'
+            }]
         }, {
           text: proc { t('txt.views.navigation.collections') },
           href: proc { collections_path },
