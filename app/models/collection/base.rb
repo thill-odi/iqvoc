@@ -25,10 +25,21 @@ class Collection::Base < Concept::Base
       foreign_key: 'collection_id',
       dependent: :destroy
 
+  has_many :concepts,
+      through: :members,
+      source: :target,
+      source_type: Iqvoc::Concept.base_class_name
+
+  has_many :subcollections,
+      through: :members,
+      source: :target,
+      source_type: Iqvoc::Collection.base_class_name
+
   has_many :parent_collection_members,
       class_name: 'Collection::Member::Base',
       foreign_key: 'target_id',
       dependent: :destroy
+
   has_many :parent_collections,
       through: :parent_collection_members,
       source: 'collection'
@@ -72,14 +83,6 @@ class Collection::Base < Concept::Base
 
   def self.new_link_partial_name
     'partials/collection/new_link_base'
-  end
-
-  def subcollections
-    members.map(&:target).select { |m| m.is_a?(::Collection::Base) }
-  end
-
-  def concepts
-    members.map(&:target).reject { |m| m.is_a?(::Collection::Base) }
   end
 
   def additional_info
