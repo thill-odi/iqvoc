@@ -139,16 +139,16 @@ class Collection::Base < Concept::Base
     return if target_origins.nil? # There is nothing to do
     existing = self.members.includes(:target)
     existing = if target_class <= Collection::Base
-      existing.select { |m| m.target.is_a?(Collection::Base) }
-    else
-      existing.reject { |m| m.target.is_a?(Collection::Base) }
-    end
+                 existing.select { |m| m.target.is_a?(Collection::Base) }
+               else
+                 existing.reject { |m| m.target.is_a?(Collection::Base) }
+               end
     new = []
     target_origins.each do |new_origin|
       member = existing.find{ |m| m.target.origin == new_origin }
       unless member
         c = target_class.by_origin(new_origin).first
-        member = Iqvoc::Collection.member_class.create(collection: self, target: c) if c
+        member = Iqvoc::Collection.member_class.create(collection: self, target_id: c.id, target_type: c.type) if c
       end
       new << member if member
     end
