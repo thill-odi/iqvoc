@@ -1,4 +1,4 @@
-<% if owner = result.owner %>
+<% if owner == result.owner %>
 <li class="search-result" data-rdf-namespace="<%= result.rdf_namespace %>" data-rdf-predicate="<%= result.rdf_predicate %>" data-rdf-value="<%= result.to_s %>" data-rdf-language="<%= result.language %>">
   <%= link_to_object(owner, result.target.value, :class => 'search-result-link', :data => { 'resource-path' => rdf_path(owner.origin, :lang => nil, :format => nil) }) %>
   <% if owner.additional_info.present? %>

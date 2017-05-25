@@ -12,6 +12,7 @@ module Concept
       validate :valid_rank_for_ranked_relations
       validate :unique_pref_label
       validate :exclusive_pref_label
+      validate :exclusive_alt_labels
       validate :unique_alt_labels
     end
 
@@ -99,6 +100,19 @@ module Concept
             errors.add :base,
               I18n.t('txt.models.concept.pref_label_defined_in_alt_labels',
                 label: pref_label.value)
+        end
+      end
+    end
+
+    def exclusive_alt_label
+      return unless validatable_for_publishing?
+      pref_labels = pref_labelings.collect { |l| l.target }
+
+      if (pref_labels & alt_labels).any?
+        (pref_labels & alt_labels).each do |l|
+          errors.add :base,
+            I18n.t('txt.models.concept.alt_label_defined_in_pref_labels',
+              label: l.value)
         end
       end
     end
