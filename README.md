@@ -77,7 +77,7 @@ fork.
 6. Make sure you have got `config/secrets.yml` in place
 7. Boot up the app using `bundle exec rails s` (or `passenger start`
    if you use passenger)
-8. Log in with "admin@iqvoc" / "admin" or "demo@iqvoc" / "cooluri" (cf. step #5)
+8. Log in with "admin@iqvoc" / "admin123" or "demo@iqvoc" / "cooluri" (cf. step #5)
 9. Visit the Users section and change the default passwords
 
 ## Background Jobs
